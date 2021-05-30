@@ -28,11 +28,7 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date?", (req, res) => {
   let dateString = req.params.date;
   let passedInDate = new Date(dateString);
-
   let nullDate = new Date();
-  // let nullUnix = nullDate.getTime();
-  // let nullUtc = nullDate.toUTCString();
- 
   if (req.params.date == null) {
     return (
       res.json({
@@ -40,26 +36,31 @@ app.get("/api/:date?", (req, res) => {
         "utc": nullDate.toUTCString()
       })
     ); 
+  } else if (parseInt(dateString) > 10000) {
+      let unixTime = new Date(parseInt(dateString));
+      return (
+        res.json({
+          "unix": unixTime.getTime(),
+          "utc": unixTime.toUTCString()
+        })
+      );
   } else if (passedInDate == "Invalid Date") {
-    return (
-      res.json({
-        "error" : "Invalid Date"
-      })
-    ); 
+      return (
+        res.json({
+          "error" : "Invalid Date"
+        })
+      ); 
   } else {
-    let unix = passedInDate.getTime();
-    let utc = passedInDate.toUTCString();
-    return (
-      res.json({
-        "unix": unix,
-        "utc": utc
-      }) 
-    );    
+      let unix = passedInDate.getTime();
+      let utc = passedInDate.toUTCString();
+      return (
+        res.json({
+          "unix": unix,
+          "utc": utc
+        }) 
+      );    
   }
 });
-
-//Handle request to /api/1451001600000
-
 
 // listen for requests :)
 var listener = app.listen(port, function () {
