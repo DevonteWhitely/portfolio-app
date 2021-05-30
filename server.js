@@ -51,12 +51,12 @@ app.get("/api/:date?", (req, res) => {
         })
       ); 
   } else {
-      let unix = passedInDate.getTime();
-      let utc = passedInDate.toUTCString();
+      // let unix = passedInDate.getTime();
+      // let utc = passedInDate.toUTCString();
       return (
         res.json({
-          "unix": unix,
-          "utc": utc
+          "unix": passedInDate.getTime(),
+          "utc": passedInDate.toUTCString()
         }) 
       );    
   }
