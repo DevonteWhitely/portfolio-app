@@ -19,13 +19,17 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/timestamp/:date_string", (req, res) => {
+  let dateString = req.params.date_string;
+  console.log(dateString);
 
+  res.json({"error" : "Invalid Date"});
+});
 
 // listen for requests :)
 var listener = app.listen(port, function () {
