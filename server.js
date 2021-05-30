@@ -30,14 +30,14 @@ app.get("/api/:date?", (req, res) => {
   let passedInDate = new Date(dateString);
 
   let nullDate = new Date();
-  let nullUnix = nullDate.getTime();
-  let nullUtc = nullDate.toUTCString();
+  // let nullUnix = nullDate.getTime();
+  // let nullUtc = nullDate.toUTCString();
  
   if (req.params.date == null) {
     return (
       res.json({
-        "unix": nullUnix,
-        "utc": nullUtc
+        "unix": nullDate.getTime(),
+        "utc": nullDate.toUTCString()
       })
     ); 
   } else if (passedInDate == "Invalid Date") {
