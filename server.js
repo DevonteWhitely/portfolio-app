@@ -26,9 +26,11 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/:date?", (req, res) => {
   let dateString = req.params.date;
-  console.log(dateString);
-
-  res.json({"error" : "Invalid Date"});
+  let passedInDate = new Date(dateString);
+  if (passedInDate == "Invalid Date") return res.json({"error" : "Invalid Date"});
+  let unix = passedInDate.getTime();
+  let utc = passedInDate.toUTCString();
+  return res.json({"unix": unix, "utc": utc});
 });
 
 // listen for requests :)
