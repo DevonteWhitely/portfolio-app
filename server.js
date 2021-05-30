@@ -24,14 +24,20 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+//Handle request to /api/:date?
 app.get("/api/:date?", (req, res) => {
   let dateString = req.params.date;
   let passedInDate = new Date(dateString);
+  let nullDate = new Date();
+  if (req.params.date = null) return res.json({"unix": nullDate.getTime(), "utc": nullDate.toUTCString()});
   if (passedInDate == "Invalid Date") return res.json({"error" : "Invalid Date"});
   let unix = passedInDate.getTime();
   let utc = passedInDate.toUTCString();
   return res.json({"unix": unix, "utc": utc});
 });
+
+//Handle request to /api/1451001600000
+
 
 // listen for requests :)
 var listener = app.listen(port, function () {
