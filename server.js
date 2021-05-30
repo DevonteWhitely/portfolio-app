@@ -47,9 +47,14 @@ app.get("/api/:date?", (req, res) => {
       })
     ); 
   } else {
-  let unix = passedInDate.getTime();
-  let utc = passedInDate.toUTCString();
-  return res.json({"unix": unix, "utc": utc});    
+    let unix = passedInDate.getTime();
+    let utc = passedInDate.toUTCString();
+    return (
+      res.json({
+        "unix": unix,
+        "utc": utc
+      }) 
+    );    
   }
 });
 
