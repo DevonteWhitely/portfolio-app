@@ -23,12 +23,16 @@ app.get("/timestamp", function (req, res) {
   res.sendFile(__dirname + '/views/timestamp.html');
 });
 
+app.get("/requestHeaderParser", function (req, res) {
+  res.sendFile(__dirname + '/views/requestHeaderParser.html');
+});
+
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-//Handle request to /api/:date?
+//Handle request for Timestamp Microservice
 app.get("/api/:date?", (req, res) => {
   let dateString = req.params.date;
   let passedInDate = new Date(dateString);
@@ -62,6 +66,17 @@ app.get("/api/:date?", (req, res) => {
         }) 
       );    
   }
+});
+
+//Handle request for Header Parser Microservice
+app.get("/api/whoami", (req, res) => {
+  return (
+    res.json({
+      "ipaddress": "",
+      "language": "",
+      "software": ""
+    })
+  );
 });
 
 // listen for requests :)
