@@ -19,6 +19,10 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/timestamp", function (req, res) {
+  res.sendFile(__dirname + '/views/timestamp.html');
+});
+
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
@@ -51,8 +55,6 @@ app.get("/api/:date?", (req, res) => {
         })
       ); 
   } else {
-      // let unix = passedInDate.getTime();
-      // let utc = passedInDate.toUTCString();
       return (
         res.json({
           "unix": passedInDate.getTime(),
