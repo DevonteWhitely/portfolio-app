@@ -32,7 +32,7 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-//Handle request for Header Parser Microservice
+// Handle request for Header Parser Microservice
 app.get("/api/whoami", (req, res) => {
     res.json({
       ipaddress: req.ip,
@@ -41,7 +41,7 @@ app.get("/api/whoami", (req, res) => {
     });
 });
 
-//Handle request for Timestamp Microservice
+// Handle request for Timestamp Microservice
 app.get("/api/:date?", (req, res) => {
   let dateString = req.params.date;
   let passedInDate = new Date(dateString);
