@@ -32,6 +32,15 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+//Handle request for Header Parser Microservice
+app.get("/api/whoami", (req, res) => {
+    res.json({
+      ipaddress: req.ip,
+      language: "en-US",
+      software: "Safari"
+    });
+});
+
 //Handle request for Timestamp Microservice
 app.get("/api/:date?", (req, res) => {
   let dateString = req.params.date;
@@ -40,43 +49,32 @@ app.get("/api/:date?", (req, res) => {
   if (req.params.date == null) {
     return (
       res.json({
-        "unix": nullDate.getTime(),
-        "utc": nullDate.toUTCString()
+        unix: nullDate.getTime(),
+        utc: nullDate.toUTCString()
       })
     ); 
   } else if (parseInt(dateString) > 10000) {
       let unixTime = new Date(parseInt(dateString));
       return (
         res.json({
-          "unix": unixTime.getTime(),
-          "utc": unixTime.toUTCString()
+          unix: unixTime.getTime(),
+          utc: unixTime.toUTCString()
         })
       );
   } else if (passedInDate == "Invalid Date") {
       return (
         res.json({
-          "error" : "Invalid Date"
+          error : "Invalid Date"
         })
       ); 
-  } else {
-      return (
-        res.json({
-          "unix": passedInDate.getTime(),
-          "utc": passedInDate.toUTCString()
-        }) 
-      );    
+  } else if (passedInDate) {
+    return (
+      res.json({
+      unix: passedInDate.getTime(),
+      utc: passedInDate.toUTCString()
+      })
+    );
   }
-});
-
-//Handle request for Header Parser Microservice
-app.get("/api/whoami", (req, res) => {
-  return (
-    res.json({
-      "ipaddress": "",
-      "language": "",
-      "software": ""
-    })
-  );
 });
 
 // listen for requests :)
