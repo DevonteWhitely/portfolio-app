@@ -106,9 +106,7 @@ app.use(bodyParser.json());
 
 app.post("/api/shorturl", (req, res) => {
   let client_requested_url = req.body.url;
-  console.log(client_requested_url + " <= client_requested_url");
   let suffix = shortid.generate();
-  let newShortURL = suffix;
 
   let newURL = new ShortURL({
     short_url: __dirname + "/api/shorturl/" + suffix,
@@ -120,9 +118,7 @@ app.post("/api/shorturl", (req, res) => {
     error: 'invalid url'
   })
 
-  console.log(client_requested_url + " <= client_requested_url");
   let shortenedURL = client_requested_url.replace(/(^\w+:|^)\/\//, '');
-  console.log(shortenedURL + " <= shortenedURL");
 
   if (shortenedURL === client_requested_url) {
     badURL.save((err, doc) => {
@@ -149,6 +145,9 @@ app.get("/api/shorturl/:suffix", (req, res) => {
     res.redirect(urlForRedirect.original_url);
   });
 });
+
+// Handle request for Exercise Tracker
+
 
 // listen for requests :)
 var listener = app.listen(port, function () {
