@@ -27,20 +27,24 @@ app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 20
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/timestamp", function (req, res) {
+app.get("/timestamp", (req, res) => {
   res.sendFile(__dirname + '/views/timestamp.html');
 });
 
-app.get("/requestHeaderParser", function (req, res) {
+app.get("/requestHeaderParser", (req, res) => {
   res.sendFile(__dirname + '/views/requestHeaderParser.html');
 });
 
-app.get("/urlShortenerMicroservice", function (req, res) {
+app.get("/urlShortenerMicroservice", (req, res) => {
   res.sendFile(__dirname + '/views/urlShortenerMicroservice.html');
+});
+
+app.get("/exerciseTracker", (req, res) => {
+  res.sendFile(__dirname + '/views/exerciseTracker.html')
 });
 
 // your first API endpoint... 
@@ -149,6 +153,6 @@ app.get("/api/shorturl/:suffix", (req, res) => {
 
 
 // listen for requests :)
-var listener = app.listen(port, function () {
+var listener = app.listen(port, () => {
   console.log('Your app is listening on port ' + listener.address().port + "...");
 });
