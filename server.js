@@ -106,7 +106,7 @@ app.use(bodyParser.json());
 
 app.post("/api/shorturl", (req, res) => {
   let client_requested_url = req.body.url;
-  console.log(req.body.url + " <= req.body.url");
+  console.log(client_requested_url + " <= client_requested_url");
   let suffix = shortid.generate();
   let newShortURL = suffix;
 
@@ -116,14 +116,18 @@ app.post("/api/shorturl", (req, res) => {
     suffix: suffix
   })
 
-    // let url = dns.lookup(newURL.original_url, (err, addresses, family) => {
-    //   console.log(addresses + " <= addresses");
-    //   if (addresses === undefined) {
-    //     res.json({
-    //       error: 'invalid url'
-    //     })
-    //   }
-    // })
+  console.log(client_requested_url + " <= client_requested_url");
+  let shortenedURL = client_requested_url.replace(/(^\w+:|^)\/\//, '');
+  console.log(shortenedURL + " <= shortenedURL");
+
+    let url = dns.lookup(shortenedURL, (err, addresses, family) => {
+      console.log(addresses + " <= addresses");
+      if (addresses === undefined) {
+        res.json({
+          error: 'invalid url'
+        })
+      }
+    })
 
   newURL.save((err, doc) => {
     if (err) return console.log(err);
