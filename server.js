@@ -116,14 +116,14 @@ app.post("/api/shorturl", (req, res) => {
     suffix: suffix
   })
 
-    let url = dns.lookup(newURL.original_url, (err, addresses, family) => {
-      console.log(addresses + " <= addresses");
-      if (addresses === undefined) {
-        res.json({
-          error: 'invalid url'
-        })
-      }
-    })
+    // let url = dns.lookup(newURL.original_url, (err, addresses, family) => {
+    //   console.log(addresses + " <= addresses");
+    //   if (addresses === undefined) {
+    //     res.json({
+    //       error: 'invalid url'
+    //     })
+    //   }
+    // })
 
   newURL.save((err, doc) => {
     if (err) return console.log(err);
