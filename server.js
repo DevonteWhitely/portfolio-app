@@ -9,6 +9,9 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var shortid = require('shortid');
+
+var dns = require('dns');
+
 var app = express();
 var port = process.env.PORT || 3000;
 
@@ -103,6 +106,7 @@ app.use(bodyParser.json());
 
 app.post("/api/shorturl", (req, res) => {
   let client_requested_url = req.body.url;
+  console.log(req.body.url + " <= req.body.url");
   let suffix = shortid.generate();
   let newShortURL = suffix;
 
@@ -111,6 +115,15 @@ app.post("/api/shorturl", (req, res) => {
     original_url: client_requested_url,
     suffix: suffix
   })
+
+    let url = dns.lookup(newURL.original_url, (err, addresses, family) => {
+      console.log(addresses + " <= addresses");
+      if (addresses === undefined) {
+        res.json({
+          error: 'invalid url'
+        })
+      }
+    })
 
   newURL.save((err, doc) => {
     if (err) return console.log(err);
