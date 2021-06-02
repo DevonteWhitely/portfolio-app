@@ -116,9 +116,9 @@ app.post("/api/shorturl", (req, res) => {
     suffix: suffix
   })
 
-  // console.log(client_requested_url + " <= client_requested_url");
-  // let shortenedURL = client_requested_url.replace(/(^\w+:|^)\/\//, '');
-  // console.log(shortenedURL + " <= shortenedURL");
+  console.log(client_requested_url + " <= client_requested_url");
+  let shortenedURL = client_requested_url.replace(/(^\w+:|^)\/\//, '');
+  console.log(shortenedURL + " <= shortenedURL");
 
   //   let url = dns.lookup(shortenedURL, (err, addresses, family) => {
   //     console.log(addresses + " <= addresses");
