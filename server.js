@@ -135,20 +135,12 @@ app.post("/api/shorturl", (req, res) => {
     newURL.save((err, doc) => {
       if (err) return console.log(err);
         res.json({
-          // short_url: newURL.short_url,
           short_url: newURL.suffix,
-          original_url: newURL.original_url,
-          // suffix: newURL.suffix
+          original_url: newURL.original_url
         });
       });
   }
-  // dns.lookup(shortenedURL, (err, addresses, family) => {
-  //   console.log(addresses + " <= addresses");
-  //   if (err) return console.log(err + " <= this is the error");
-  // })
 });
-
-
 
 app.get("/api/shorturl/:suffix", (req, res) => {
   let userGeneratedSuffix = req.params.suffix;
