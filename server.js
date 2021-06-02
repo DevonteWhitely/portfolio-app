@@ -116,29 +116,39 @@ app.post("/api/shorturl", (req, res) => {
     suffix: suffix
   })
 
+  let badURL = new ShortURL({
+    error: 'invalid url'
+  })
+
   console.log(client_requested_url + " <= client_requested_url");
   let shortenedURL = client_requested_url.replace(/(^\w+:|^)\/\//, '');
   console.log(shortenedURL + " <= shortenedURL");
 
-  //   let url = dns.lookup(shortenedURL, (err, addresses, family) => {
-  //     console.log(addresses + " <= addresses");
-  //     if (addresses === undefined) {
-  //       res.json({
-  //         error: 'invalid url'
-  //       })
-  //     }
-  //   })
-
-  newURL.save((err, doc) => {
-    if (err) return console.log(err);
-    res.json({
-      // short_url: newURL.short_url,
-      short_url: newURL.suffix,
-      original_url: newURL.original_url,
-      // suffix: newURL.suffix
-    });
-  });
+  if (shortenedURL === client_requested_url) {
+    badURL.save((err, doc) => {
+      if (err) return console.log(err);
+      res.json({
+        error: 'invalid url'
+      })
+    })
+  } else {
+    newURL.save((err, doc) => {
+      if (err) return console.log(err);
+        res.json({
+          // short_url: newURL.short_url,
+          short_url: newURL.suffix,
+          original_url: newURL.original_url,
+          // suffix: newURL.suffix
+        });
+      });
+  }
+  // dns.lookup(shortenedURL, (err, addresses, family) => {
+  //   console.log(addresses + " <= addresses");
+  //   if (err) return console.log(err + " <= this is the error");
+  // })
 });
+
+
 
 app.get("/api/shorturl/:suffix", (req, res) => {
   let userGeneratedSuffix = req.params.suffix;
