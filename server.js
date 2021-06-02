@@ -1,10 +1,19 @@
+var database_uri = "mongodb+srv://DevonteWhitely:August01@cluster0.fnaqv.mongodb.net/Cluster0?retryWrites=true&w=majority";
+
 // server.js
 // where your node app starts
 
 // init project
 var express = require('express');
+var mongo = require('mongodb');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var shortid = require('shortid');
 var app = express();
 var port = process.env.PORT || 3000;
+
+// mongoose.connect(process.env.DB_URI);
+mongoose.connect(database_uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -82,9 +91,47 @@ app.get("/api/:date?", (req, res) => {
 });
 
 // Handle request for URL Shortener Microservice
+var ShortURL = mongoose.model('Test', new mongoose.Schema({
+  short_url: String,
+  original_url: String,
+  suffix: String
+}));
 
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(bodyParser.json());
+
+app.post("/api/shorturl", (req, res) => {
+  let client_requested_url = req.body.url;
+  let suffix = shortid.generate();
+  let newShortURL = suffix;
+
+  let newURL = new ShortURL({
+    short_url: __dirname + "/api/shorturl/" + suffix,
+    original_url: client_requested_url,
+    suffix: suffix
+  })
+
+  newURL.save((err, doc) => {
+    if (err) return console.log(err);
+    res.json({
+      saved: true,
+      short_url: newURL.short_url,
+      original_url: newURL.original_url,
+      suffix: newURL.suffix
+    });
+  });
+});
+
+app.get("/api/shorturl/:suffix", (req, res) => {
+  let userGeneratedSuffix = req.params.suffix;
+  ShortURL.find({suffix: userGeneratedSuffix}).then(foundUrls => {
+    let urlForRedirect = foundUrls[0];
+    res.redirect(urlForRedirect.original_url);
+  });
+});
 
 // listen for requests :)
 var listener = app.listen(port, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+  console.log('Your app is listening on port ' + listener.address().port + "...");
 });
