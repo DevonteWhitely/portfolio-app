@@ -1,4 +1,4 @@
-var database_uri = "mongodb+srv://DevonteWhitely:August01@cluster0.fnaqv.mongodb.net/Cluster0?retryWrites=true&w=majority";
+var database_uri = 'mongodb+srv://DevonteWhitely:August01@cluster0.fnaqv.mongodb.net/Cluster0?retryWrites=true&w=majority';
 
 // server.js
 // where your node app starts
@@ -27,33 +27,33 @@ app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 20
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/timestamp", (req, res) => {
+app.get('/timestamp', (req, res) => {
   res.sendFile(__dirname + '/views/timestamp.html');
 });
 
-app.get("/requestHeaderParser", (req, res) => {
+app.get('/requestHeaderParser', (req, res) => {
   res.sendFile(__dirname + '/views/requestHeaderParser.html');
 });
 
-app.get("/urlShortenerMicroservice", (req, res) => {
+app.get('/urlShortenerMicroservice', (req, res) => {
   res.sendFile(__dirname + '/views/urlShortenerMicroservice.html');
 });
 
-app.get("/exerciseTracker", (req, res) => {
+app.get('/exerciseTracker', (req, res) => {
   res.sendFile(__dirname + '/views/exerciseTracker.html')
 });
 
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
+app.get('/api/hello', function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-// Handle request for Header Parser Microservice
-app.get("/api/whoami", (req, res) => {
+// Handle requests for Header Parser Microservice
+app.get('/api/whoami', (req, res) => {
     res.json({
       ipaddress: req.ip,
       language: req.headers["accept-language"],
@@ -61,8 +61,8 @@ app.get("/api/whoami", (req, res) => {
     });
 });
 
-// Handle request for Timestamp Microservice
-app.get("/api/:date?", (req, res) => {
+// Handle requests for Timestamp Microservice
+app.get('/api/:date?', (req, res) => {
   let dateString = req.params.date;
   let passedInDate = new Date(dateString);
   let nullDate = new Date();
@@ -81,10 +81,10 @@ app.get("/api/:date?", (req, res) => {
           utc: unixTime.toUTCString()
         })
       );
-  } else if (passedInDate == "Invalid Date") {
+  } else if (passedInDate == 'Invalid Date') {
       return (
         res.json({
-          error : "Invalid Date"
+          error : 'Invalid Date'
         })
       ); 
   } else if (passedInDate) {
@@ -97,7 +97,7 @@ app.get("/api/:date?", (req, res) => {
   }
 });
 
-// Handle request for URL Shortener Microservice
+// Handle requests for URL Shortener Microservice
 var ShortURL = mongoose.model('Test', new mongoose.Schema({
   short_url: String,
   original_url: String,
@@ -108,7 +108,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(bodyParser.json());
 
-app.post("/api/shorturl", (req, res) => {
+app.post('/api/shorturl', (req, res) => {
   let client_requested_url = req.body.url;
   let suffix = shortid.generate();
 
@@ -141,7 +141,7 @@ app.post("/api/shorturl", (req, res) => {
   }
 });
 
-app.get("/api/shorturl/:suffix", (req, res) => {
+app.get('/api/shorturl/:suffix', (req, res) => {
   let userGeneratedSuffix = req.params.suffix;
   ShortURL.find({suffix: userGeneratedSuffix}).then(foundUrls => {
     let urlForRedirect = foundUrls[0];
@@ -149,10 +149,29 @@ app.get("/api/shorturl/:suffix", (req, res) => {
   });
 });
 
-// Handle request for Exercise Tracker
+// Handle requests for Exercise Tracker
+var ExerciseUser = mongoose.model('ExerciseUser', new mongoose.Schema({
+  _id: String,
+  username: String
+}));
 
+app.post('/api/users', (req, res) => {
+  console.log('Handling posts request');
+  let mongooseGeneratedID = mongoose.Types.ObjectId();
+  let exerciseUser = new ExerciseUser({
+    username: req.body.username,
+    _id: mongooseGeneratedID
+  })
+  exerciseUser.save((err, doc) => {
+    if (err) return console.log(err);
+    res.json({
+      username: exerciseUser.username,
+      _id: exerciseUser['_id']
+    });
+  });
+});
 
 // listen for requests :)
 var listener = app.listen(port, () => {
-  console.log('Your app is listening on port ' + listener.address().port + "...");
+  console.log('Your app is listening on port ' + listener.address().port + '...');
 });
