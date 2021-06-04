@@ -62,40 +62,40 @@ app.get('/api/whoami', (req, res) => {
 });
 
 // Handle requests for Timestamp Microservice
-app.get('/api/:date?', (req, res) => {
-  let dateString = req.params.date;
-  let passedInDate = new Date(dateString);
-  let nullDate = new Date();
-  if (req.params.date == null) {
-    return (
-      res.json({
-        unix: nullDate.getTime(),
-        utc: nullDate.toUTCString()
-      })
-    ); 
-  } else if (parseInt(dateString) > 10000) {
-      let unixTime = new Date(parseInt(dateString));
-      return (
-        res.json({
-          unix: unixTime.getTime(),
-          utc: unixTime.toUTCString()
-        })
-      );
-  } else if (passedInDate == 'Invalid Date') {
-      return (
-        res.json({
-          error : 'Invalid Date'
-        })
-      ); 
-  } else if (passedInDate) {
-    return (
-      res.json({
-      unix: passedInDate.getTime(),
-      utc: passedInDate.toUTCString()
-      })
-    );
-  }
-});
+// app.get('/api/:date?', (req, res) => {
+//   let dateString = req.params.date;
+//   let passedInDate = new Date(dateString);
+//   let nullDate = new Date();
+//   if (req.params.date == null) {
+//     return (
+//       res.json({
+//         unix: nullDate.getTime(),
+//         utc: nullDate.toUTCString()
+//       })
+//     ); 
+//   } else if (parseInt(dateString) > 10000) {
+//       let unixTime = new Date(parseInt(dateString));
+//       return (
+//         res.json({
+//           unix: unixTime.getTime(),
+//           utc: unixTime.toUTCString()
+//         })
+//       );
+//   } else if (passedInDate == 'Invalid Date') {
+//       return (
+//         res.json({
+//           error : 'Invalid Date'
+//         })
+//       ); 
+//   } else if (passedInDate) {
+//     return (
+//       res.json({
+//       unix: passedInDate.getTime(),
+//       utc: passedInDate.toUTCString()
+//       })
+//     );
+//   }
+// });
 
 // Handle requests for URL Shortener Microservice
 var ShortURL = mongoose.model('Test', new mongoose.Schema({
@@ -152,11 +152,10 @@ app.get('/api/shorturl/:suffix', (req, res) => {
 // Handle requests for Exercise Tracker
 var ExerciseUser = mongoose.model('ExerciseUser', new mongoose.Schema({
   _id: String,
-  username: String
+  username: {type: String, unique: true}
 }));
 
 app.post('/api/users', (req, res) => {
-  console.log('Handling posts request');
   let mongooseGeneratedID = mongoose.Types.ObjectId();
   let exerciseUser = new ExerciseUser({
     username: req.body.username,
@@ -168,6 +167,15 @@ app.post('/api/users', (req, res) => {
       username: exerciseUser.username,
       _id: exerciseUser['_id']
     });
+  });
+});
+
+app.get('/api/users', (req, res) => {
+  ExerciseUser.find({}, (err, exerciseUsers) => {
+    if (err) return console.log(err);
+    res.json({
+      users: exerciseUsers
+    })
   });
 });
 
