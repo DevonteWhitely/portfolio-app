@@ -154,7 +154,8 @@ var ExerciseUser = mongoose.model('ExerciseUser', new mongoose.Schema({
   _id: String,
   username: String,
   description: String,
-  duration: Number
+  duration: Number,
+  date: Date
 }));
 
 app.post('/api/users', (req, res) => {
@@ -180,17 +181,21 @@ app.get('/api/users', (req, res) => {
 });
 
 app.post('/api/users/:_id/exercises', (req, res) => {
+  let currentDate = new Date();
+  console.log(currentDate);
   let mongooseGeneratedID = mongoose.Types.ObjectId();
   let exerciseUser = new ExerciseUser({
     description: req.body.description,
     duration: req.body.duration,
+    date: req.body.date,
     _id: mongooseGeneratedID
   })
   exerciseUser.save((err, doc) => {
     if (err) return console.log(err);
     res.json({
       description: exerciseUser.description,
-      duration: exerciseUser.duration
+      duration: exerciseUser.duration,
+      date: exerciseUser.date === null ? currentDate : exerciseUser.date
     });
   });
 });
