@@ -195,7 +195,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     res.json({
       description: exerciseUser.description,
       duration: exerciseUser.duration,
-      date: exerciseUser.date === null ? currentDate : exerciseUser.date
+      date: exerciseUser.date === null ? currentDate.toUTCString() : exerciseUser.date.toUTCString(),
     });
   });
 });
