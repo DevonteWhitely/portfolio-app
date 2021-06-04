@@ -173,9 +173,7 @@ app.post('/api/users', (req, res) => {
 app.get('/api/users', (req, res) => {
   ExerciseUser.find({}, (err, exerciseUsers) => {
     if (err) return console.log(err);
-    res.json({
-      users: exerciseUsers
-    })
+    res.json(exerciseUsers);
   });
 });
 
