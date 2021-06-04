@@ -182,7 +182,6 @@ app.get('/api/users', (req, res) => {
 
 app.post('/api/users/:_id/exercises', (req, res) => {
   let currentDate = new Date();
-  console.log(currentDate);
   let mongooseGeneratedID = mongoose.Types.ObjectId();
   let exerciseUser = new ExerciseUser({
     description: req.body.description,
