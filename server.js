@@ -152,7 +152,9 @@ app.get('/api/shorturl/:suffix', (req, res) => {
 // Handle requests for Exercise Tracker
 var ExerciseUser = mongoose.model('ExerciseUser', new mongoose.Schema({
   _id: String,
-  username: {type: String, unique: true}
+  username: String,
+  description: String,
+  duration: Number
 }));
 
 app.post('/api/users', (req, res) => {
@@ -174,6 +176,22 @@ app.get('/api/users', (req, res) => {
   ExerciseUser.find({}, (err, exerciseUsers) => {
     if (err) return console.log(err);
     res.json(exerciseUsers);
+  });
+});
+
+app.post('/api/users/:_id/exercises', (req, res) => {
+  let mongooseGeneratedID = mongoose.Types.ObjectId();
+  let exerciseUser = new ExerciseUser({
+    description: req.body.description,
+    duration: req.body.duration,
+    _id: mongooseGeneratedID
+  })
+  exerciseUser.save((err, doc) => {
+    if (err) return console.log(err);
+    res.json({
+      description: exerciseUser.description,
+      duration: exerciseUser.duration
+    });
   });
 });
 
