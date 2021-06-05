@@ -62,40 +62,40 @@ app.get('/api/whoami', (req, res) => {
 });
 
 // Handle requests for Timestamp Microservice
-// app.get('/api/:date?', (req, res) => {
-//   let dateString = req.params.date;
-//   let passedInDate = new Date(dateString);
-//   let nullDate = new Date();
-//   if (req.params.date == null) {
-//     return (
-//       res.json({
-//         unix: nullDate.getTime(),
-//         utc: nullDate.toUTCString()
-//       })
-//     ); 
-//   } else if (parseInt(dateString) > 10000) {
-//       let unixTime = new Date(parseInt(dateString));
-//       return (
-//         res.json({
-//           unix: unixTime.getTime(),
-//           utc: unixTime.toUTCString()
-//         })
-//       );
-//   } else if (passedInDate == 'Invalid Date') {
-//       return (
-//         res.json({
-//           error : 'Invalid Date'
-//         })
-//       ); 
-//   } else if (passedInDate) {
-//     return (
-//       res.json({
-//       unix: passedInDate.getTime(),
-//       utc: passedInDate.toUTCString()
-//       })
-//     );
-//   }
-// });
+app.get('/api/:date?', (req, res) => {
+  let dateString = req.params.date;
+  let passedInDate = new Date(dateString);
+  let nullDate = new Date();
+  if (req.params.date == null) {
+    return (
+      res.json({
+        unix: nullDate.getTime(),
+        utc: nullDate.toUTCString()
+      })
+    ); 
+  } else if (parseInt(dateString) > 10000) {
+      let unixTime = new Date(parseInt(dateString));
+      return (
+        res.json({
+          unix: unixTime.getTime(),
+          utc: unixTime.toUTCString()
+        })
+      );
+  } else if (passedInDate == 'Invalid Date') {
+      return (
+        res.json({
+          error : 'Invalid Date'
+        })
+      ); 
+  } else if (passedInDate) {
+    return (
+      res.json({
+      unix: passedInDate.getTime(),
+      utc: passedInDate.toUTCString()
+      })
+    );
+  }
+});
 
 // Handle requests for URL Shortener Microservice
 var ShortURL = mongoose.model('Test', new mongoose.Schema({
@@ -160,7 +160,7 @@ var ExerciseUser = mongoose.model('ExerciseUser', new mongoose.Schema({
 
 app.post('/api/users', (req, res) => {
   let mongooseGeneratedID = mongoose.Types.ObjectId();
-  let exerciseUser = new ExerciseUser({
+  var exerciseUser = new ExerciseUser({
     username: req.body.username,
     _id: mongooseGeneratedID
   })
@@ -184,17 +184,23 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   let currentDate = new Date();
   let mongooseGeneratedID = mongoose.Types.ObjectId();
   let exerciseUser = new ExerciseUser({
+    username: req.body.username,
+    _id: mongooseGeneratedID,
     description: req.body.description,
     duration: req.body.duration,
-    date: req.body.date,
-    _id: mongooseGeneratedID
+    date: req.body.date
   })
   exerciseUser.save((err, doc) => {
     if (err) return console.log(err);
     res.json({
-      description: exerciseUser.description,
-      duration: exerciseUser.duration,
-      date: exerciseUser.date === null ? currentDate.toUTCString() : exerciseUser.date.toUTCString(),
+      username: exerciseUser.username,
+      _id: exerciseUser['_id'],
+        description: exerciseUser.description,
+        duration: exerciseUser.duration,
+        date: 
+          exerciseUser.date === null 
+          ? currentDate.toUTCString() 
+          : exerciseUser.date.toUTCString()
     });
   });
 });
